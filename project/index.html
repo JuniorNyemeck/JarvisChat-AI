@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jarvis Chat - Assistant IA Intelligent</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-robot"></i>
+                    <span>Jarvis</span>
+                </div>
+                <button class="new-chat-btn" id="newChatBtn">
+                    <i class="fas fa-plus"></i>
+                    <span>Nouvelle discussion</span>
+                </button>
+            </div>
+
+            <div class="model-selector">
+                <label for="modelSelect">Modèle IA</label>
+                <select id="modelSelect" class="model-select">
+                    <option value="jarvis-pro">Jarvis Pro</option>
+                    <option value="gpt-4">GPT-4</option>
+                    <option value="claude-3">Claude 3</option>
+                    <option value="gemini-pro">Gemini Pro</option>
+                    <option value="llama-2">Llama 2</option>
+                </select>
+            </div>
+
+            <div class="conversations-list" id="conversationsList">
+                <div class="conversation-item active" data-conversation-id="1">
+                    <div class="conversation-info">
+                        <div class="conversation-title">Discussion générale</div>
+                        <div class="conversation-preview">Bonjour ! Comment puis-je vous aider ?</div>
+                    </div>
+                    <div class="conversation-actions">
+                        <button class="edit-btn" title="Renommer">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="delete-btn" title="Supprimer">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div class="avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-info">
+                        <div class="username">Utilisateur</div>
+                        <div class="status online">En ligne</div>
+                    </div>
+                </div>
+                <button class="settings-btn" title="Paramètres">
+                    <i class="fas fa-cog"></i>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Chat Area -->
+        <main class="chat-container">
+            <div class="chat-header">
+                <div class="chat-info">
+                    <div class="chat-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="chat-details">
+                        <h2 class="chat-title">Jarvis Pro</h2>
+                        <span class="chat-status">Assistant IA - En ligne</span>
+                    </div>
+                </div>
+                <div class="chat-actions">
+                    <button class="action-btn" title="Rechercher">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    <button class="action-btn" id="moreOptionsBtn" title="Plus d'options">
+                        <i class="fas fa-ellipsis-v"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="search-bar" id="searchBar" style="display: none;">
+                <div class="search-input-wrapper">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Rechercher dans les messages...">
+                    <button class="close-search" id="closeSearch">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="search-results" id="searchResults"></div>
+            </div>
+
+            <div class="messages-container" id="messagesContainer">
+                <div class="welcome-message">
+                    <div class="welcome-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3>Bienvenue dans Jarvis Chat</h3>
+                    <p>Votre assistant IA intelligent est prêt à vous aider. Posez-moi n'importe quelle question !</p>
+                </div>
+            </div>
+
+            <!-- Reply Preview -->
+            <div class="reply-preview" id="replyPreview" style="display: none;">
+                <div class="reply-content">
+                    <div class="reply-info">
+                        <span class="reply-to">Répondre à</span>
+                        <span class="reply-author"></span>
+                    </div>
+                    <div class="reply-text"></div>
+                </div>
+                <button class="close-reply" id="closeReply">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="chat-input-container">
+                <div class="input-actions">
+                    <button class="attachment-btn" id="attachmentBtn" title="Joindre un fichier">
+                        <i class="fas fa-paperclip"></i>
+                    </button>
+                    <input type="file" id="fileInput" multiple accept="image/*,video/*,audio/*,.pdf,.doc,.docx,.txt" style="display: none;">
+                </div>
+                
+                <div class="message-input-wrapper">
+                    <textarea id="messageInput" class="message-input" placeholder="Tapez votre message..."></textarea>
+                    <button class="emoji-btn" id="emojiBtn" title="Emojis">
+                        <i class="fas fa-smile"></i>
+                    </button>
+                </div>
+                
+                <div class="voice-controls">
+                    <button class="voice-btn" id="voiceBtn" title="Enregistrer un message vocal">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                </div>
+                
+                <button class="send-btn" id="sendBtn" title="Envoyer">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+
+            <!-- File Preview -->
+            <div class="file-preview" id="filePreview" style="display: none;">
+                <div class="file-preview-content" id="filePreviewContent"></div>
+                <button class="remove-files" id="removeFiles">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <!-- Emoji Picker -->
+    <div class="emoji-picker" id="emojiPicker" style="display: none;">
+        <div class="emoji-categories">
+            <button class="emoji-category active" data-category="smileys">😀</button>
+            <button class="emoji-category" data-category="people">👋</button>
+            <button class="emoji-category" data-category="nature">🌿</button>
+            <button class="emoji-category" data-category="food">🍎</button>
+            <button class="emoji-category" data-category="activities">⚽</button>
+            <button class="emoji-category" data-category="travel">🚗</button>
+            <button class="emoji-category" data-category="objects">💡</button>
+            <button class="emoji-category" data-category="symbols">❤️</button>
+        </div>
+        <div class="emoji-grid" id="emojiGrid"></div>
+    </div>
+
+    <!-- More Options Menu -->
+    <div class="more-options-menu" id="moreOptionsMenu" style="display: none;">
+        <div class="menu-item" id="clearChatOption">
+            <i class="fas fa-broom"></i>
+            <span>Effacer la conversation</span>
+        </div>
+        <div class="menu-item" id="exportChatOption">
+            <i class="fas fa-download"></i>
+            <span>Exporter la conversation</span>
+        </div>
+        <div class="menu-item" id="archiveChatOption">
+            <i class="fas fa-archive"></i>
+            <span>Archiver</span>
+        </div>
+        <div class="menu-item" id="blockUserOption">
+            <i class="fas fa-ban"></i>
+            <span>Bloquer</span>
+        </div>
+    </div>
+
+    <!-- Settings Panel -->
+    <div class="settings-panel" id="settingsPanel" style="display: none;">
+        <div class="settings-header">
+            <h3>Paramètres</h3>
+            <button class="close-settings" id="closeSettings">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="settings-content">
+            <!-- Profile Settings -->
+            <div class="settings-section">
+                <h4>Profil</h4>
+                <div class="profile-settings">
+                    <div class="profile-photo-section">
+                        <div class="current-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <button class="change-photo-btn" id="changePhotoBtn">
+                            <i class="fas fa-camera"></i>
+                            Changer la photo
+                        </button>
+                        <input type="file" id="profilePhotoInput" accept="image/*" style="display: none;">
+                    </div>
+                    <div class="username-section">
+                        <label for="usernameInput">Nom d'utilisateur</label>
+                        <input type="text" id="usernameInput" value="Utilisateur" class="settings-input">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Theme Settings -->
+            <div class="settings-section">
+                <h4>Thème</h4>
+                <div class="theme-options">
+                    <div class="theme-option active" data-theme="dark">
+                        <div class="theme-preview dark-theme"></div>
+                        <span>Sombre</span>
+                    </div>
+                    <div class="theme-option" data-theme="light">
+                        <div class="theme-preview light-theme"></div>
+                        <span>Clair</span>
+                    </div>
+                    <div class="theme-option" data-theme="blue">
+                        <div class="theme-preview blue-theme"></div>
+                        <span>Bleu</span>
+                    </div>
+                    <div class="theme-option" data-theme="purple">
+                        <div class="theme-preview purple-theme"></div>
+                        <span>Violet</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Background Settings -->
+            <div class="settings-section">
+                <h4>Arrière-plan</h4>
+                <div class="background-options">
+                    <div class="color-picker-section">
+                        <label for="backgroundColorPicker">Couleur de fond</label>
+                        <input type="color" id="backgroundColorPicker" value="#0f0f23">
+                    </div>
+                    <div class="background-image-section">
+                        <label>Image de fond</label>
+                        <button class="upload-bg-btn" id="uploadBgBtn">
+                            <i class="fas fa-image"></i>
+                            Choisir une image
+                        </button>
+                        <input type="file" id="backgroundImageInput" accept="image/*" style="display: none;">
+                        <button class="remove-bg-btn" id="removeBgBtn" style="display: none;">
+                            <i class="fas fa-trash"></i>
+                            Supprimer l'image
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notification Settings -->
+            <div class="settings-section">
+                <h4>Notifications</h4>
+                <div class="notification-settings">
+                    <div class="setting-item">
+                        <label class="switch">
+                            <input type="checkbox" id="soundNotifications" checked>
+                            <span class="slider"></span>
+                        </label>
+                        <span>Sons de notification</span>
+                    </div>
+                    <div class="setting-item">
+                        <label class="switch">
+                            <input type="checkbox" id="desktopNotifications" checked>
+                            <span class="slider"></span>
+                        </label>
+                        <span>Notifications bureau</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Voice Recording Modal -->
+    <div class="voice-modal" id="voiceModal" style="display: none;">
+        <div class="voice-modal-content">
+            <div class="recording-indicator">
+                <div class="pulse-ring"></div>
+                <div class="recording-icon">
+                    <i class="fas fa-microphone"></i>
+                </div>
+            </div>
+            <div class="recording-time" id="recordingTime">00:00</div>
+            <div class="recording-controls">
+                <button class="cancel-recording" id="cancelRecording">
+                    <i class="fas fa-times"></i>
+                    Annuler
+                </button>
+                <button class="stop-recording" id="stopRecording">
+                    <i class="fas fa-stop"></i>
+                    Arrêter
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Overlay -->
+    <div class="overlay" id="overlay" style="display: none;"></div>
+
+    <!-- Context Menu -->
+    <div class="context-menu" id="contextMenu" style="display: none;">
+        <div class="context-menu-item" id="replyOption">
+            <i class="fas fa-reply"></i>
+            <span>Répondre</span>
+        </div>
+        <div class="context-menu-item" id="copyOption">
+            <i class="fas fa-copy"></i>
+            <span>Copier</span>
+        </div>
+        <div class="context-menu-item" id="deleteOption">
+            <i class="fas fa-trash"></i>
+            <span>Supprimer</span>
+        </div>
+    </div>
+
+    <!-- Typing Indicator -->
+    <div class="typing-indicator" id="typingIndicator" style="display: none;">
+        <div class="typing-avatar">
+            <i class="fas fa-robot"></i>
+        </div>
+        <div class="typing-text">
+            <span>Jarvis tape</span>
+            <div class="typing-dots">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <script src="chat.js"></script>
+</body>
+</html>
